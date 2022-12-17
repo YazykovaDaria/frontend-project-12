@@ -16,6 +16,7 @@ parserOptions:
 plugins:
   - react
   - functional
+  - only-warn
 
 rules:
   import/extensions: 0
