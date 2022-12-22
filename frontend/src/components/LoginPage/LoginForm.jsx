@@ -1,42 +1,83 @@
 import * as yup from 'yup';
-import { Formik, Field, Form } from 'formik';
-import style from './Login.module.css';
+import { useFormik } from 'formik';
+import {
+  Button, Form, FloatingLabel, FormControl,
+} from 'react-bootstrap';
 
-const validationLoginScheema = yup.object({
-  username: yup.string()
-    .min(2, 'errors.username.length')
-    .max(20, 'errors.username.length')
-    .required('errors.username.required'),
-  password: yup.string()
-    .min(2, 'errors.password.length')
-    .max(20, 'errors.password.length')
-    .required('errors.password.required'),
-});
+const LoginForm = () => {
+  const formik = useFormik({
+    initialValues: {
+      nickname: '',
+      password: '',
+    },
+    validationSchema: yup.object({
+      nickname: yup.string()
+        .min(2, 'errors.nickname.length')
+        .max(20, 'errors.nickname.length')
+        .required('errors.nickname.required'),
+      password: yup.string()
+        .min(2, 'errors.password.length')
+        .max(20, 'errors.password.length')
+        .required('errors.password.required'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
-const LoginForm = () => (
-  <div>
-    <h2>Войти</h2>
-    <Formik
-      initialValues={{
-        nickname: '',
-        password: '',
-      }}
-      onSubmit={async (values) => {
-        await new Promise((r) => setTimeout(r, 500));
-        alert(JSON.stringify(values, null, 2));
-      }}
-      validationSchema={validationLoginScheema}
-    >
+  return (
+    <>
+      <h3>Войти</h3>
+      <Form onSubmit={formik.handleSubmit}>
+        <Form.Group className="mb-3" controlId="formLogin">
+          <FloatingLabel
+            label="loginPlaceholder"
+            className="mb-3"
+            controlId="nickname"
+          >
+            <Form.Control
+              onChange={formik.handleChange}
+              value={formik.values.nickname}
+              name="nickname"
+              autoComplete="nickname"
+              isInvalid={(formik.touched.nickname && formik.errors.nickname)}
+              // ref={inputRef}
+              placeholder="loginPlaceholder"
+            />
+            {formik.touched.nickname && formik.errors.nickname && (
+            <span className="text-danger">{formik.errors.nickname}</span>
+            )}
+          </FloatingLabel>
+        </Form.Group>
 
-      <Form className={`d-flex flex-column ${style.form}`}>
-        <Field className="form-control" id="nickname" name="nickname" placeholder="Ваш ник" />
+        <Form.Group>
+          <FloatingLabel
+            label="passwordPlaceholder"
+            controlId="password"
+            className="mb-4"
+          >
+            <FormControl
+              type="password"
+              name="password"
+              placeholder="passwordPlaceholder"
+              autoComplete="current-password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              isInvalid={(formik.touched.password && formik.errors.password)}
+            />
+            {formik.touched.password && formik.errors.password && (
+            <span className="text-danger">{formik.errors.password}</span>
+            )}
+            <FormControl.Feedback type="invalid" tooltip>errors.other.authFailed</FormControl.Feedback>
+          </FloatingLabel>
+        </Form.Group>
 
-        <Field className="form-control" id="password" name="password" placeholder="Пароль" />
-        <button className="btn btn-primary" type="submit">Войти</button>
+        <Button variant="primary" type="submit" disabled={formik.isSubmitting}>
+          Войти
+        </Button>
       </Form>
-    </Formik>
-  </div>
-);
-
+    </>
+  );
+};
 
 export default LoginForm;

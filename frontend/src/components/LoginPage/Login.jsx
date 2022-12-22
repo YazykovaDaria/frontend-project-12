@@ -1,9 +1,10 @@
 import Card from 'react-bootstrap/Card';
 import { NavLink } from 'react-router-dom';
 import LoginForm from './LoginForm';
+import style from './Login.module.css';
 
 const Login = () => (
-  <Card>
+  <Card className={style.form}>
     <Card.Body>
 
       <LoginForm />
