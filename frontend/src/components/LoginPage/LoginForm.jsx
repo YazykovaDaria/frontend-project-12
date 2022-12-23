@@ -3,25 +3,39 @@ import { useFormik } from 'formik';
 import {
   Button, Form, FloatingLabel, FormControl,
 } from 'react-bootstrap';
+import { logIn } from '../../api/api';
+// import { useTranslation } from 'react-i18next';
 
 const LoginForm = () => {
+  // const { t } = useTranslation();
+
   const formik = useFormik({
     initialValues: {
-      nickname: '',
+      username: '',
       password: '',
     },
     validationSchema: yup.object({
-      nickname: yup.string()
-        .min(2, 'errors.nickname.length')
-        .max(20, 'errors.nickname.length')
-        .required('errors.nickname.required'),
+      username: yup.string()
+        .min(2, 'errors.userName.length')
+        .max(20, 'errors.userName.length')
+        .required('errors.userName.required'),
       password: yup.string()
         .min(2, 'errors.password.length')
         .max(20, 'errors.password.length')
         .required('errors.password.required'),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      try {
+        const response = await logIn(values);
+        console.log(response);
+      } catch (err) {
+        if (err.response.status === 401) {
+          console.log('auth err');
+
+        } else {
+         console.log('network err');
+        }
+      }
     },
   });
 
@@ -33,19 +47,21 @@ const LoginForm = () => {
           <FloatingLabel
             label="loginPlaceholder"
             className="mb-3"
-            controlId="nickname"
+            controlId="username"
           >
             <Form.Control
+              name="username"
+              autoComplete="username"
+              placeholder="login.username"
+              value={formik.values.userName}
               onChange={formik.handleChange}
-              value={formik.values.nickname}
-              name="nickname"
-              autoComplete="nickname"
-              isInvalid={(formik.touched.nickname && formik.errors.nickname)}
+              onBlur={formik.onBlur}
+              isInvalid={(formik.touched.userName && formik.errors.userName)}
               // ref={inputRef}
-              placeholder="loginPlaceholder"
+
             />
-            {formik.touched.nickname && formik.errors.nickname && (
-            <span className="text-danger">{formik.errors.nickname}</span>
+            {formik.touched.userName && formik.errors.userName && (
+            <span className="text-danger">{formik.errors.userName}</span>
             )}
           </FloatingLabel>
         </Form.Group>
@@ -60,9 +76,10 @@ const LoginForm = () => {
               type="password"
               name="password"
               placeholder="passwordPlaceholder"
-              autoComplete="current-password"
+              autoComplete="password"
               value={formik.values.password}
               onChange={formik.handleChange}
+              onBlur={formik.onBlur}
               isInvalid={(formik.touched.password && formik.errors.password)}
             />
             {formik.touched.password && formik.errors.password && (
