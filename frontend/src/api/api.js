@@ -4,7 +4,7 @@ const instance = axios.create({
   baseURL: '/api/v1/',
 });
 
-export const logIn = async (loginData) => {
+export const getLogin = async (loginData) => {
   const response = await instance.post('login', loginData);
  return response;
 };
