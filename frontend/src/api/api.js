@@ -6,12 +6,11 @@ const instance = axios.create({
 
 export const getLogin = async (loginData) => {
   const response = await instance.post('login', loginData);
- return response;
+  return response;
 };
 
-// export const profileAPI = {
-//   getProfile(userId) {
-//     return instance.get(`profile/${userId}`)
-//       .then((response) => response.data);
-//   },
-// };
+export const getData = async (token) => {
+  const header = { Authorization: `Bearer ${token}` };
+  const response = await instance.get('data', { headers: header });
+  return response;
+};
