@@ -3,11 +3,22 @@ import { useFormik } from 'formik';
 import {
   Button, Form, FloatingLabel, FormControl,
 } from 'react-bootstrap';
-import { logIn } from '../../api/api';
+import { useContext, useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getLogin } from '../../api/api';
+import { AuthContext } from '../../context/context';
 // import { useTranslation } from 'react-i18next';
 
 const LoginForm = () => {
   // const { t } = useTranslation();
+  const { logIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [isAutorized, setAutorized] = useState(false);
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -25,15 +36,18 @@ const LoginForm = () => {
         .required('errors.password.required'),
     }),
     onSubmit: async (values) => {
+      setAutorized(false);
       try {
-        const response = await logIn(values);
-        console.log(response);
+        const response = await getLogin(values);
+        logIn(response.data);
+        navigate('/');
+        // console.log(response);
       } catch (err) {
         if (err.response.status === 401) {
           console.log('auth err');
-
+          setAutorized(true);
         } else {
-         console.log('network err');
+          console.log('network err');
         }
       }
     },
@@ -53,15 +67,15 @@ const LoginForm = () => {
               name="username"
               autoComplete="username"
               placeholder="login.username"
-              value={formik.values.userName}
+              value={formik.values.username}
               onChange={formik.handleChange}
               onBlur={formik.onBlur}
-              isInvalid={(formik.touched.userName && formik.errors.userName)}
-              // ref={inputRef}
+              isInvalid={(formik.touched.username && formik.errors.username) || isAutorized}
+              ref={inputRef}
 
             />
-            {formik.touched.userName && formik.errors.userName && (
-            <span className="text-danger">{formik.errors.userName}</span>
+            {formik.touched.username && formik.errors.username && (
+            <span className="text-danger">{formik.errors.username}</span>
             )}
           </FloatingLabel>
         </Form.Group>
@@ -80,7 +94,7 @@ const LoginForm = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.onBlur}
-              isInvalid={(formik.touched.password && formik.errors.password)}
+              isInvalid={(formik.touched.password && formik.errors.password) || isAutorized}
             />
             {formik.touched.password && formik.errors.password && (
             <span className="text-danger">{formik.errors.password}</span>
