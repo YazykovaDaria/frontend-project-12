@@ -13,9 +13,19 @@ const AuthProvider = ({ children }) => {
     setUser({ username: userData.username });
   };
 
+  const logOut = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  const getUserName = () => {
+    const { username } = JSON.parse(localStorage.getItem('user'));
+    return username;
+  };
+
   const getToken = () => {
     const userData = JSON.parse(localStorage.getItem('user'));
-    const token = userData ? userData.token : null;
+    const token = userData ? userData.token : '';
     return token;
   };
 
@@ -23,7 +33,9 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{
       user,
       logIn,
+      logOut,
       getToken,
+      getUserName,
     }}
     >
       {children}
