@@ -9,6 +9,11 @@ export const getLogin = async (loginData) => {
   return response;
 };
 
+export const signup = async (userData) => {
+  const response = await instance.post('signup', userData);
+  return response;
+};
+
 export const getData = async (token) => {
   const header = { Authorization: `Bearer ${token}` };
   const response = await instance.get('data', { headers: header });
