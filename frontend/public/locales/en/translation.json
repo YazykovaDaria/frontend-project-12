@@ -1,0 +1,17 @@
+{
+  "signIn": "Sign in",
+  "signUp": "Sign Up",
+  "login": {
+    "username": "Your nick",
+    "password": "Password",
+    "submitBtn": "Sign in",
+    "registration": "Registration",
+    "signupQuest": "Don't have an account?",
+    "errors": {
+      "requaried": "Requaried field",
+      "authFailed": "Invalid username or password"
+    }
+  },
+  "header": {
+  }
+}
