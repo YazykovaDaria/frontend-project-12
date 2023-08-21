@@ -1,0 +1,9 @@
+.link-icon * {
+  fill: rgb(2, 2, 53);
+  transition: 0.3s;
+}
+
+.link-icon:hover * {
+  fill: blue;
+  transition: 0.3s;
+}
