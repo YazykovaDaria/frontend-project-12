@@ -6,11 +6,14 @@
     "password": "Password",
     "submitBtn": "Sign in",
     "registration": "Registration",
-    "signupQuest": "Don't have an account?",
-    "errors": {
-      "requaried": "Requaried field",
-      "authFailed": "Invalid username or password"
-    }
+    "signupQuest": "Don't have an account?"
+  },
+  "errors": {
+    "requaried": "Requaried field",
+    "authFailed": "Invalid username or password",
+    "minLength": "Minimum 2 symbols",
+    "maxLength": "Maximum 20 symbols",
+    "network": "Network error"
   },
   "header": {
   }
