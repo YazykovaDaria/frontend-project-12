@@ -7,23 +7,20 @@ import Footer from './Footer';
 const Layout = () => {
   const mainLocation = '/';
   const location = useLocation().pathname;
-  const [isMainLocation, setMainLocation] = useState(false);
+  const [isShowFooter, setShowFooter] = useState(false);
 
   useEffect(() => {
-    if (location === mainLocation) {
-      setMainLocation(true);
-    } else {
-      setMainLocation(false);
-    }
+    const isShow = location !== mainLocation;
+    setShowFooter(isShow);
   }, [location]);
 
   return (
     <div className="d-flex flex-column min-vh-100">
       <Header />
-      <Container fluid="md" className="flex-grow-1">
+      <Container fluid="md" className="flex-grow-1 d-flex align-items-center justify-content-center">
         <Outlet />
       </Container>
-      {!isMainLocation && <Footer />}
+      {isShowFooter && <Footer />}
     </div>
   );
 };
